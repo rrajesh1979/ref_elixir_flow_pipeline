@@ -1,0 +1,4 @@
+request_id,name,credit_requested,requested_date,location
+REQ-03,Peter,130000,2022-02-01,Houston
+REQ-04,Bell,240000,2022-02-02,San Antonio
+REQ-05,Graham,150000,2022-02-03,Denver
