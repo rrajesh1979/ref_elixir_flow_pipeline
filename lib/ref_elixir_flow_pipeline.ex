@@ -74,22 +74,36 @@ defmodule RefElixir.FlowPipeline do
     )
   end
 
+  def process_flow_slow(file_path) do
+    read_feed_files(file_path)
+    |> Flow.from_enumerables()
+    |> Flow.map(&parse_record/1)
+    |> Flow.map(&experian_check/1)
+    |> Flow.map(&equifax_check/1)
+    |> Flow.map(&aml_check/1)
+    |> Flow.map(&fraud_check/1)
+    |> Flow.map(&account_balance_check/1)
+    |> Flow.map(&credit_decision/1)
+    |> Flow.map(&print_record/1)
+    |> Flow.run()
+  end
+
   def process_flow(file_path) do
     read_feed_files(file_path)
-    |> Flow.from_enumerables(max_demand: 10)
-    |> Flow.partition(max_demand: 10, stages: 5)
+    |> Flow.from_enumerables(max_demand: 100)
+    |> Flow.partition(max_demand: 100, stages: 50)
     |> Flow.map(&parse_record/1)
-    |> Flow.partition(max_demand: 10, stages: 5)
+    |> Flow.partition(max_demand: 100, stages: 50)
     |> Flow.map(&experian_check/1)
-    |> Flow.partition(max_demand: 10, stages: 5)
+    |> Flow.partition(max_demand: 100, stages: 50)
     |> Flow.map(&equifax_check/1)
-    |> Flow.partition(max_demand: 10, stages: 5)
+    |> Flow.partition(max_demand: 100, stages: 50)
     |> Flow.map(&aml_check/1)
-    |> Flow.partition(max_demand: 10, stages: 5)
+    |> Flow.partition(max_demand: 100, stages: 50)
     |> Flow.map(&fraud_check/1)
-    |> Flow.partition(max_demand: 10, stages: 5)
+    |> Flow.partition(max_demand: 100, stages: 50)
     |> Flow.map(&account_balance_check/1)
-    |> Flow.partition(max_demand: 10, stages: 5)
+    |> Flow.partition(max_demand: 100, stages: 50)
     |> Flow.map(&credit_decision/1)
     |> Flow.map(&print_record/1)
     |> Flow.run()
@@ -321,3 +335,15 @@ end
 # Commands
 # RefElixir.FlowPipeline.process_flow("/Users/rajesh/Learn/elixir/ref_elixir_flow_pipeline/priv/data")
 # RefElixir.FlowPipeline.process_flow_benchmark("/Users/rajesh/Learn/elixir/ref_elixir_flow_pipeline/priv/data")
+# slow - max_demand and stages = 1
+# process_flow_slow = fn (file_path) -> RefElixir.FlowPipeline.process_flow_slow(file_path) end
+# {uSecs, :ok} = :timer.tc(process_flow_slow, ["/Users/rajesh/Learn/elixir/ref_elixir_flow_pipeline/priv/data"])
+# 17_808_993 uSecs
+# 18_815_982 uSecs
+# 17_734_882 uSecs
+# fast - max_demand and stages = 10 and 5
+# process_flow_fast = fn (file_path) -> RefElixir.FlowPipeline.process_flow(file_path) end
+# {uSecs, :ok} = :timer.tc(process_flow_fast, ["/Users/rajesh/Learn/elixir/ref_elixir_flow_pipeline/priv/data"])
+# 2_864_803 uSecs
+# 2_514_095 uSecs
+# 2_482_752 uSecs
