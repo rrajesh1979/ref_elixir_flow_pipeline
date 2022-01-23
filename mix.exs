@@ -50,7 +50,11 @@ defmodule RefElixirFlowPipeline.MixProject do
       {:nimble_csv, "~> 1.2"},
 
       # Library to build flow pipeline
-      {:flow, "~> 1.1"}
+      {:flow, "~> 1.1"},
+
+      # Benchmarking tool
+      {:benchee, "~> 1.0", only: :dev},
+      {:benchee_html, "~> 1.0", only: :dev}
     ]
   end
 

@@ -1,3 +1,11 @@
 request_id,name,credit_requested,requested_date,location
-REQ-01,John,100000,2022-01-01,Boston
-REQ-02,Jane,200000,2022-01-02,Dallas
+REQ-001-01,John,100000,2022-01-01,Boston
+REQ-001-02,Jane,200000,2022-01-02,Dallas
+REQ-001-03,Peter,1300000,2022-02-01,Houston
+REQ-001-04,Bell,240000,2022-02-02,San Antonio
+REQ-001-05,Graham,150000,2022-02-03,Denver
+REQ-001-06,Kathy,1000000,2022-02-04,New York
+REQ-001-07,Sally,200000,2022-02-05,Chicago
+REQ-001-08,Walter,132000,2022-02-06,Los Angeles
+REQ-001-09,Linda,240000,2022-02-07,Seattle
+REQ-001-10,Steve,150000,2022-02-08,Portland
